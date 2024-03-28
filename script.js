@@ -6,7 +6,7 @@ let rows = canvas.height/blockSize;
 let columns = canvas.width/blockSize;
 let time = 120;
 let speedBump = 4;
-let dx = 1;
+let dx = -1;
 let dy = 0;
 let snake = []
 snake.push({x: (columns/2), y: (rows/2)});
@@ -14,8 +14,9 @@ let foodX = 0;
 let foodY = 0;
 let score = 0;
 let interval;
+let menu = document.getElementsByClassName("menu");
+let lightsElement = document.getElementById("lights");
 let scoreElement = document.getElementById("score");
-let lightsElements = document.getElementById("lights");
 let lights = 1;
 
 
@@ -31,7 +32,7 @@ let bottomPressed = false;
 
 // event listeners for key pressed
 document.addEventListener("keydown", keyDownHandler, false);
-lightsElements.addEventListener("click", darkModeHandler, false);
+lightsElement.addEventListener("click", darkModeHandler, false);
 
 // key down
 function keyDownHandler(event){
@@ -117,6 +118,7 @@ function draw(){
         increaseSpeed();
         generateFood();
     }
+    drawScore();
     if(leftPressed && dx===0){
         dx = -1;
         dy = 0;
@@ -135,14 +137,14 @@ function draw(){
     if(headX + dx < 0){
         headX = columns + dx;
     }else if(headX + dx >= columns){
-        headX = dx;
+        headX = 0;
     }else{
         headX += dx;
     }
     if(headY + dy < 0){
         headY = rows + dy;
     }else if(headY + dy >= rows){
-        headY = dy;
+        headY = 0;
     }else{
         headY += dy;
     }
@@ -151,6 +153,14 @@ function draw(){
         alert(`Game over! Your score is: ${score}. Restart?`, score);
         document.location.reload();
         clearInterval(interval);
+        /*
+        score = 0;
+        time = 120;
+        snake = [{x: (columns/2), y: (rows/2)}];
+        dx = -1;
+        dy = 0;
+        generateFood();
+        */
     }else{
         snake.splice(0,0, {x:headX, y:headY});
         snake.pop();
@@ -168,17 +178,23 @@ function setup(){
     interval = setInterval(draw, time);
 }
 
+function drawScore(){
+    scoreElement.textContent = `Score: ${score}`;
+}
+
 function darkModeHandler(){
     if(lights===1){
         lights = 0;
         document.body.style.backgroundColor = "#121212";
-        lightsElements.innerHTML = `<u>lights on</u>&emsp;Score: ${score}`;
-        lightsElements.style.color = "#EEEEEE";
+        lightsElement.innerHTML = `<u>lights on</u>`;
+        lightsElement.style.color = "#EEE";
+        scoreElement.style.color = "#EEE";
     }else{
         lights = 1;
         document.body.style.backgroundColor = "#FFFFFF";
-        lightsElements.innerHTML = `<u>lights off</u>&emsp;Score: ${score}`;
-        lightsElements.style.color = "#000";
+        lightsElement.innerHTML = `<u>lights off</u>`;
+        lightsElement.style.color = "#000";
+        scoreElement.style.color = "#000";
     }
 }
 

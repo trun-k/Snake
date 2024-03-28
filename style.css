@@ -1,0 +1,15 @@
+body{
+    padding: 0;
+    margin: 0;
+}
+
+div{
+    margin: 20px auto;
+    width: 800px;
+    display: block;
+    text-align: right;
+}
+
+canvas {
+    background: #ccc; 
+}
